@@ -1,0 +1,92 @@
+server:
+  port: 2040
+  
+spring:
+  application:
+    name: web-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/sh?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: root
+    password: root
+#禁止配置中心的配置覆盖客户端配置
+  cloud:
+    config:
+      override-none: true
+    
+  rabbitmq:
+    host: 192.168.0.100
+    port: 5672
+    username: admin
+    password: admin
+    
+logging:
+  file: web.log
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2000/eureka
+
+#全局ribbon配置,也可以单独对服务配置
+ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
+    ConnectTimeout: 500 #请求连接超时时间
+    ReadTimeout: 1100 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有请求都进行重试
+    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+    MaxAutoRetries: 1 #对当前实例的重试次数
+    
+#feign整合hystrix开启hystrix服务
+feign:
+  hystrix:
+    enabled: true
+    
+#hystrix超时开启设置
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+      
+      circuitBreaker:
+         requestVolumeThreshold: 5       #请求失败次数hystrix打开阈值(10秒内默认20次)
+         sleepWindowInMilliseconds: 5000  #hystrix半开时间,默认为5秒
+  
+            
+#暴露hystrix监控
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

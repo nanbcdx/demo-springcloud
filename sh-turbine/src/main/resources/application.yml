@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: turbine
+    
+server:
+  port: 2030
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2000/eureka
+      
+turbine:
+  app-config: web-service,sh-zuul
+  cluster-name-expression: new String("default")

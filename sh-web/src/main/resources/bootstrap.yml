@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      name: web-service
+      profile: dev
+#选择网卡向euerka注册
+    inetutils:
+      ignored-interfaces:   #忽略的网卡
+      - VM.*
+      preferred-networks:   #使用网卡的网段
+      - 192.168.0      
+      
+eureka:
+#使用ip地址注册
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port} # 界面列表中显示的格式也显示ip
+  client:
+    service-url:
+      defaultZone: http://eureka1:2000/eureka
+      

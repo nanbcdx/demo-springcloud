@@ -1,0 +1,71 @@
+package cn.tedu.sh.FBService;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.springframework.cloud.netflix.zuul.filters.route.FallbackProvider;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
+public class ItemService implements FallbackProvider {
+	
+	/**
+	 * 指定服务,失败后使用当前降级类
+	 * "*"和null代表所有服务失败后都应用当前降级类
+	 */
+	@Override
+	public String getRoute() {
+		return "item-service";
+	}
+	
+	/**
+	 * 返回封装了降级响应的对象"
+	 */
+	@Override
+	public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
+		return new ClientHttpResponse() {
+			
+			@Override
+			public HttpHeaders getHeaders() {
+				HttpHeaders headers=new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				return headers;
+			}
+			
+			@Override
+			public InputStream getBody() throws IOException {
+				log.info("item-service  fallback ");
+				return new ByteArrayInputStream("后台服务器繁忙,请稍后再试".getBytes("utf-8"));
+			}
+			
+			@Override
+			public String getStatusText() throws IOException {
+				return HttpStatus.OK.getReasonPhrase();
+			}
+			
+			@Override
+			public HttpStatus getStatusCode() throws IOException {
+				return HttpStatus.OK;
+			}
+			
+			@Override
+			public int getRawStatusCode() throws IOException {
+				return HttpStatus.OK.value();
+			}
+			
+			@Override
+			public void close() {
+				
+			}
+		};
+	}
+
+}

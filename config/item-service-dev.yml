@@ -1,0 +1,51 @@
+server:
+  port: 2010
+  
+spring:
+  application:
+    name: item-service
+    
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/sh?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: root
+    password: root
+    
+  rabbitmq:
+    host: 192.168.0.100
+    port: 5672
+    username: admin
+    password: admin
+    
+logging:
+  file: item.log
+  level:
+    cn.tedu.sh.mapper: debug   
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2000/eureka
+
+mybatis-plus: 
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations:
+  - classpath:/mybatis/mapper/*.xml
+  type-aliases-package: cn.tedu.sh.pojo
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - refresh
+  
+sp:
+  user-service:
+    users: "[{\"id\":7, \"username\":\"黄承志王成\",\"password\":\"123\"},{\"id\":8, \"username\":\"def\",\"password\":\"456\"},{\"id\":9, \"username\":\"ghi\",\"password\":\"789\"}]"
+
+  
+
+  

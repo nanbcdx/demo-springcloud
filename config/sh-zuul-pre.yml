@@ -1,0 +1,62 @@
+server:
+  port: 3050
+  
+spring:
+  application:
+    name: sh-zuul
+  #解决全局中文乱码问题
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+      
+  rabbitmq:
+    host: 192.168.0.100
+    port: 5672
+    username: admin
+    password: admin
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka1:2000/eureka
+
+#路由设置   
+zuul:
+  routes:
+    item-service: /item-service/**
+    web-service:  /web-service/**
+#开启重试机制
+  retryable: true
+  #全局敏感信息过滤配置,设置空值
+  sensitive-headers:
+  - 
+   
+#配置ribbon
+ribbon:
+  ConnectTimeout: 1000
+  ReadTimeout: 2000
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 1
+  
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 500
+            
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+        
+person:
+  name: 黄承志
+  age: 20
+          
+          
+        
